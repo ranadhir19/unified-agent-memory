@@ -1,0 +1,29 @@
+# Render blueprint: FastAPI access layer (web service) + React demo UI
+# (static site). The API seeds itself with the experiment fixtures when
+# UAM_SEED_FIXTURES is set, so the demo shows the cross-harness scenario
+# and all four adapters with zero external services.
+services:
+  - type: web
+    name: unified-agent-memory-api
+    env: python
+    buildCommand: pip install ".[server]"
+    startCommand: uam-serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: UAM_STATE_FILE
+        value: /tmp/uam-state.json
+      - key: UAM_SEED_FIXTURES
+        value: experiments/fixtures
+      - key: PYTHON_VERSION
+        value: 3.12.3
+
+  - type: web
+    name: unified-agent-memory-web
+    env: static
+    buildCommand: cd web && npm install && npm run build
+    staticPublishPath: web/dist
+    envVars:
+      # Point the UI at the API service once it exists:
+      # - key: VITE_API_URL
+      #   value: https://unified-agent-memory-api.onrender.com
+      - key: NODE_VERSION
+        value: 20

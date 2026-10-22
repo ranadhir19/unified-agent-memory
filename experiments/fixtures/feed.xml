@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Example Engineering Feed</title>
+    <link>https://example.com/</link>
+    <description>Recorded RSS fixture.</description>
+    <item>
+      <title>The community meetup is on 2026-12-05</title>
+      <link>https://example.com/meetup</link>
+      <guid>https://example.com/meetup</guid>
+      <description>Monthly data engineering meetup, lightning talks and demos.</description>
+      <pubDate>Wed, 01 Oct 2026 09:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Graph databases in production</title>
+      <link>https://example.com/graph-prod</link>
+      <guid>https://example.com/graph-prod</guid>
+      <description>Notes on running graph stores under real workloads.</description>
+      <pubDate>Thu, 02 Oct 2026 09:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

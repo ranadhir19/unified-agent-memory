@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unified Agent Memory — one memory layer under every harness</title>
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.55; }
+  main { max-width: 880px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 38px; margin: 0 0 8px; }
+  h2 { margin-top: 44px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .lede { font-size: 19px; color: var(--muted); }
+  a { color: var(--accent); }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+  pre { background: var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: 14px; }
+  th { background: var(--panel); }
+  .cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:12px; }
+  .card { background: var(--panel); border:1px solid var(--border); border-radius:8px; padding:16px; }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; }
+  .pill { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:1px 10px; font-size:12px; color:var(--accent); margin-right:6px; }
+  footer { margin-top: 56px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Unified Agent Memory</h1>
+  <p class="lede">One memory layer under every agent harness — Claude Code, Codex, Cursor — and every source it learns from: GitHub, note files, RSS feeds, Slack exports.</p>
+  <p>
+    <span class="pill">hooks</span><span class="pill">Neo4j</span><span class="pill">dream phase</span>
+    <span class="pill">source adapters</span><span class="pill">MCP</span><span class="pill">GraphQL</span>
+  </p>
+  <p>
+    <a href="https://github.com/ranadhir19/unified-agent-memory">Repository</a> ·
+    <a href="https://github.com/ranadhir19/unified-agent-memory#readme">README</a> ·
+    <a href="https://github.com/ranadhir19">Author</a>
+  </p>
+
+  <h2>The idea</h2>
+  <p>
+    Every harness keeps its own walled garden of context; switch tools and you start from zero.
+    This project keeps memory <em>outside</em> the harness. Lifecycle hooks passively log every
+    session event into one graph. An offline dream phase distills events into durable markdown
+    memories that are merged, never appended — contradictions rewrite the note. On the next
+    session start, in <em>any</em> harness, the profile memories are injected into context.
+  </p>
+  <p>
+    The extension beyond the original design: <strong>adapters to third-party data sources</strong>
+    feed the same graph, each record carrying provenance. A fact that exists only in a GitHub
+    issue, a Slack thread, or an RSS item becomes memory a coding agent recalls — memory
+    belongs to the user, not the tool.
+  </p>
+
+  <h2>Measured results</h2>
+  <table>
+    <tr><th>Experiment</th><th>Result</th></tr>
+    <tr><td>E1 Cross-harness continuity</td><td>12/12 seeded facts recalled in a fresh session in a different harness — including 3 that existed only in third-party sources</td></tr>
+    <tr><td>E2 Adapter ingestion</td><td>16 records, 4 adapters; re-ingest dedup rate 1.00; provenance completeness 100%</td></tr>
+    <tr><td>E3 Dream merge</td><td>Contradiction rewritten into a single fact; latest value wins; stale value gone</td></tr>
+    <tr><td>E4 Hook latency</td><td>Mean 0.029 ms in-process per event; 0.082 s full subprocess (what a harness pays)</td></tr>
+    <tr><td>E5 Retrieval quality</td><td>Precision@3 0.875 — the one miss is a synonym query (lexical search; stated plainly in the limitations)</td></tr>
+  </table>
+
+  <h2>Pieces</h2>
+  <div class="cards">
+    <div class="card"><h3>Hook runtime</h3><p>One <code>uam-hook</code> entrypoint for all three harnesses, with generated per-harness configs and each harness's real injection contract.</p></div>
+    <div class="card"><h3>Graph store</h3><p>A <code>GraphStore</code> protocol with two implementations: Neo4j (the article's linked-list event graph) and an identical in-memory store for zero-service runs.</p></div>
+    <div class="card"><h3>Dream phase</h3><p>Deterministic, fully offline distillation by default; an optional LLM distiller sits behind a provider seam.</p></div>
+    <div class="card"><h3>Source adapters</h3><p>GitHub, files, RSS, Slack exports — normalized records with <code>SOURCED_FROM</code> provenance, idempotent ingest.</p></div>
+    <div class="card"><h3>Access layer</h3><p>FastAPI REST + Strawberry GraphQL, an MCP server for on-demand CRUD, and a React demo UI with the cross-harness timeline.</p></div>
+    <div class="card"><h3>Experiments</h3><p>Seeded, reproducible, end-to-end through the real hook entrypoint — with honest conclusions and limitations.</p></div>
+  </div>
+
+  <h2>Quickstart</h2>
+  <pre>pip install -e .
+python3 examples/quickstart.py   # hooks in -&gt; dream -&gt; recall in another harness
+uam-config claude-code           # ready-to-install hook configs (also: codex, cursor)
+uam-ingest github octocat hello-world
+python3 experiments/run_experiments.py</pre>
+
+  <h2>Attribution</h2>
+  <p>
+    Design inspired by
+    <a href="https://towardsdatascience.com/unified-agentic-memory-across-harnesses-using-hooks/">"Unified Agentic Memory Across Harnesses Using Hooks"</a>
+    (Towards Data Science), which implements hooks against Neo4j. This repository adds the
+    source-adapter layer, the MCP server, the API + demo UI, the deterministic dream phase,
+    and the experiment suite.
+  </p>
+
+  <footer>MIT licensed · Ranadhir Ghosh · <a href="https://ranadhir19.github.io/">portfolio</a></footer>
+</main>
+</body>
+</html>

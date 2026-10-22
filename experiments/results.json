@@ -1,0 +1,135 @@
+{
+  "E1_cross_harness_continuity": {
+    "seeded_facts": 12,
+    "recalled": 12,
+    "hit_rate": 1.0,
+    "found": [
+      "role",
+      "deploy target",
+      "staging database",
+      "preference",
+      "rate limit",
+      "release cadence",
+      "on-call",
+      "git branch",
+      "standup",
+      "migration deadline",
+      "incident channel",
+      "community meetup"
+    ],
+    "missed": [],
+    "probe_harness": "codex (facts seeded via claude-code, cursor, codex + 4 adapters)"
+  },
+  "E2_adapter_ingestion": {
+    "per_adapter": {
+      "github:octocat/hello-world": {
+        "fetched": 9,
+        "added": 9
+      },
+      "files:notes": {
+        "fetched": 2,
+        "added": 2
+      },
+      "rss:example.com": {
+        "fetched": 2,
+        "added": 2
+      },
+      "slack:workspace": {
+        "fetched": 3,
+        "added": 3
+      }
+    },
+    "fetched": 16,
+    "added_first_pass": 16,
+    "duplicates_second_pass": 16,
+    "dedup_rate_second_pass": 1.0,
+    "provenance_completeness": 1.0,
+    "source_events": 16
+  },
+  "E3_dream_merge": {
+    "notes_for_path": 1,
+    "deploy_target_facts": 1,
+    "final_value": "GCP",
+    "stale_value_in_body": false,
+    "contradictions_rewritten": 1,
+    "note_version": 1
+  },
+  "E4_hook_latency": {
+    "events": 14,
+    "mean_ms": 0.029,
+    "p95_ms": 0.08,
+    "max_ms": 0.08,
+    "scope": "in-process dispatch + in-memory store write (excludes interpreter start)",
+    "subprocess_wall_mean_s": 0.082,
+    "subprocess_wall_note": "full uam-hook subprocess per event from E1 (interpreter start + state load/save included) -- the number a harness actually pays"
+  },
+  "E5_retrieval_quality": {
+    "queries": 8,
+    "precision_at_3": 0.875,
+    "hit_rate_at_3": 0.875,
+    "detail": [
+      {
+        "query": "git rebase branches",
+        "expected": "tools/git.md",
+        "got": [
+          "tools/git.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "docker images volumes",
+        "expected": "tools/docker.md",
+        "got": [
+          "tools/docker.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "kubernetes pods deployments",
+        "expected": "tools/kubectl.md",
+        "got": [
+          "tools/kubectl.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "container orchestration platform",
+        "expected": "tools/kubectl.md",
+        "got": [],
+        "hit": false
+      },
+      {
+        "query": "oauth tokens authentication",
+        "expected": "topics/security.md",
+        "got": [
+          "topics/security.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "pytest fixtures",
+        "expected": "topics/testing.md",
+        "got": [
+          "topics/testing.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "deploy staging database",
+        "expected": "project/atlas-api.md",
+        "got": [
+          "project/atlas-api.md"
+        ],
+        "hit": true
+      },
+      {
+        "query": "tracing metrics logs",
+        "expected": "topics/observability.md",
+        "got": [
+          "topics/observability.md"
+        ],
+        "hit": true
+      }
+    ]
+  }
+}
