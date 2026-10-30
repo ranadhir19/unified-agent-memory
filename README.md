@@ -25,6 +25,10 @@ the tool.
 Everything below runs **offline, with no API keys**. Neo4j and the LLM
 distiller are opt-in upgrades behind the same interfaces.
 
+## Watch it built
+
+This system is part of the portfolio built and measured on camera at **[The Architect's AI Workshop](https://www.youtube.com/@ArchitectsAIWorkshop)** — *first principles on the whiteboard, built live in the editor, measured honestly.* Browse the episodes: [youtube.com/@ArchitectsAIWorkshop/videos](https://www.youtube.com/@ArchitectsAIWorkshop/videos)
+
 ## Measured results (real runs — see experiments/RESULTS.md)
 
 | Experiment | Result |
